@@ -201,7 +201,7 @@ void CacheList::unmalloc(CacheItem *i)
     case SPEC_EXTERNAL_LCACHE : if (i->data) free(i->data); break;
     case SPEC_PALETTE : delete ((char_tint *)i->data); break;
     default :
-      printf("Trying to unmalloc unknown type\n");
+      fprintf(stderr, "Trying to unmalloc unknown type\n");
   }
   i->data=NULL;
   i->last_access=-1;
@@ -663,7 +663,7 @@ void CacheList::unreg(int id)
         list[id].file_number = -1;
     }
     else
-        printf("Error : trying to unregister free object\n");
+        fprintf(stderr, "Error : trying to unregister free object\n");
 }
 
 CacheList::CacheList()
@@ -729,7 +729,7 @@ void CacheList::locate(CacheItem *i, int local_only)
 
     if (fp->open_failure())
     {
-      printf("Ooch. Could not open file %s\n",crc_manager.get_filename(i->file_number));
+      fprintf(stderr, "Ooch. Could not open file %s\n",crc_manager.get_filename(i->file_number));
       delete fp;
       exit(0);
     }
@@ -824,13 +824,13 @@ int CacheList::reg(char const *filename, char const *name, int type, int rm_dups
             check->read(buf, 4);
             if (memcmp(buf, "RIFF", 4))
             {
-                printf("File %s is not a WAV file\n", filename);
+                fprintf(stderr, "File %s is not a WAV file\n", filename);
                 exit(0);
             }
         }
         else if (sound_avail)
         {
-            printf("Unable to open file '%s' for reading\n", filename);
+            fprintf(stderr, "Unable to open file '%s' for reading\n", filename);
             exit(0);
         }
         delete check;
@@ -842,7 +842,7 @@ int CacheList::reg(char const *filename, char const *name, int type, int rm_dups
 
         if (!sd)
         {
-            printf("Unable to open file %s for item %s\n", filename, name);
+            fprintf(stderr, "Unable to open file %s for item %s\n", filename, name);
             exit(0);
         }
 
@@ -853,7 +853,7 @@ int CacheList::reg(char const *filename, char const *name, int type, int rm_dups
             se = sd->find(name);
         if (!se)
         {
-            printf("No such item %s in file %s\n", name, filename);
+            fprintf(stderr, "No such item %s in file %s\n", name, filename);
             exit(0);
         }
 
@@ -861,7 +861,7 @@ int CacheList::reg(char const *filename, char const *name, int type, int rm_dups
              ((type != SPEC_CHARACTER2 && type != SPEC_CHARACTER)
                || (se->type != SPEC_CHARACTER && se->type != SPEC_CHARACTER2)))
         {
-            printf("Item %s of file %s should be type %s\n",
+            fprintf(stderr, "Item %s of file %s should be type %s\n",
                    name, filename, spec_types[type]);
             exit(0);
         }
@@ -1059,7 +1059,7 @@ void CacheList::free_oldest()
   else
   {
     close_graphics();
-    printf("Out of memory, please remove any TSR's device drivers you can\n");
+    fprintf(stderr, "Out of memory, please remove any TSR's device drivers you can\n");
     exit(0);
   }
 }
@@ -1087,7 +1087,7 @@ void CacheList::show_accessed()
     {
       ci=new_old;
       old=ci->last_access;
-      printf("type=(%20s) file=(%20s) access=(%6ld)\n",spec_types[ci->type],
+      fprintf(stderr, "type=(%20s) file=(%20s) access=(%6ld)\n",spec_types[ci->type],
          crc_manager.get_filename(ci->file_number),
          (long int)ci->last_access);
     }

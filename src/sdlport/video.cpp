@@ -62,7 +62,11 @@ extern Settings settings;
 
 void calculate_mouse_scaling();
 
-#ifndef N64
+#ifdef N64
+SDL_Renderer *main_window_renderer = nullptr;
+SDL_PixelFormat *main_window_tex_format = nullptr;
+SDL_Texture *main_window_texture = nullptr;
+#else
 //AR OpenGL
 SDL_GLContext glcontext;
 GLuint ar_texture;
@@ -89,6 +93,10 @@ void set_mode(int argc, char **argv)
 
 	if(SDL_GetDesktopDisplayMode(0,&desktop)!=0) printf("ERROR - failed to get display info\n");
 
+#ifdef N64
+	scale = 1;
+#endif
+
 	//AR scale window
     window_w = xres*scale;
 	window_h = yres*scale;
@@ -114,11 +122,29 @@ void set_mode(int argc, char **argv)
 
     if(!window)
     {
-        show_startup_error("Video : Unable to create window : %s", SDL_GetError());
+        show_startup_error("Video : Unable to create window : %s\n", SDL_GetError());
         exit(1);
     }
 
-#ifndef N64
+#ifdef N64
+	main_window_renderer = SDL_CreateRenderer(window, -1, 0);
+    if(!main_window_renderer)
+    {
+        show_startup_error("Video : failed to create renderer : %s\n", SDL_GetError());
+        exit(1);
+    }
+
+	int bpp = 16;
+	Uint32 format = bpp == 32 ? SDL_PIXELFORMAT_RGB888 : SDL_PIXELFORMAT_RGBA5551;
+	main_window_tex_format = SDL_AllocFormat(format);
+	main_window_texture = SDL_CreateTexture(main_window_renderer, format, SDL_TEXTUREACCESS_STREAMING, ogl_w, ogl_h);
+	
+	if (main_window_texture == NULL)
+	{
+		fprintf(stderr, "error: failed to create scaler texture %dx%dx%s: %s\n", ogl_w, ogl_h, SDL_GetPixelFormatName(format), SDL_GetError());
+		exit(EXIT_FAILURE);
+	}
+#else
 	//AR OpenGL
 	glcontext = SDL_GL_CreateContext(window);
 
@@ -148,7 +174,6 @@ void set_mode(int argc, char **argv)
 	}
 	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
 	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
-#endif
 
 	//Create our surface for the OpenGL texture
 	screen = SDL_CreateRGBSurface(SDL_SWSURFACE, xres , yres , 32,
@@ -163,6 +188,7 @@ void set_mode(int argc, char **argv)
         exit(1);
     }
 	//
+#endif
 	
 	// Create our 8-bit surface
     surface = SDL_CreateRGBSurface(0, xres, yres, 8, 0, 0, 0, 0);
@@ -475,11 +501,15 @@ void palette::load_nice()
 
 void update_window_done()
 {
+
+#ifdef N64
+	SDL_Rect dst_rect = { 0, 0, 320, 240 };
+	SDL_RenderCopy(main_window_renderer, main_window_texture, NULL, &dst_rect);
+	SDL_RenderPresent(main_window_renderer);
+#else
 	//AR convert to match the OpenGL texture
 	SDL_BlitSurface(surface, NULL, screen, NULL);
 
-#ifdef N64
-#else
 	//clear the backbuffer
 	glClearColor(0,0,0,0);
 	glClear(GL_COLOR_BUFFER_BIT);

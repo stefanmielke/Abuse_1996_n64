@@ -32,6 +32,9 @@
 #ifdef __APPLE__
 # include <CoreFoundation/CoreFoundation.h>
 #endif
+#ifdef N64
+#include <libdragon.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -563,6 +566,13 @@ void parseCommandLine(int argc, char **argv)
 //
 void setup( int argc, char **argv )
 {
+#ifdef N64
+    dfs_init(0xB0201000);
+
+    debug_init_isviewer();
+    debug_init_usblog();
+    debug_init_sdfs("sd:/", -1);
+#endif
 	// Display our name and version
     //printf( "%s %s\n", PACKAGE_NAME, PACKAGE_VERSION );
 
@@ -570,7 +580,13 @@ void setup( int argc, char **argv )
 	printf( "%s %s\n", "Abuse", "0.9a" );
 
     // Initialize SDL with video and audio support
-    if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER ) < 0 )
+	int flags;
+#ifdef N64
+	flags = SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER;
+#else
+	flags = SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER;
+#endif
+    if( SDL_Init( flags ) < 0 )
     {
         show_startup_error( "Unable to initialize SDL : %s\n", SDL_GetError() );
         exit( 1 );

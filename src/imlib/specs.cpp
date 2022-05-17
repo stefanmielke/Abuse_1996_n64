@@ -377,6 +377,9 @@ void set_file_opener(bFILE *(*open_fun)(char const *, char const *))
 
 bFILE *open_file(char const *filename, char const *mode)
 {
+#ifdef N64
+#error FIX-ME to use fopen!
+#endif
   if (!verify_file_fun || verify_file_fun(filename,mode))
   {
     if (open_file_fun)
