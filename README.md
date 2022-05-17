@@ -1,3 +1,22 @@
+# Abuse N64
+
+Port of Abuse to the Nintendo 64.
+
+## Status
+
+Compiling, but not able to open files yet (needs an implementation that uses 'fopen' instead of the custom classes it uses).
+
+Music/sounds disabled for now.
+
+## Building
+
+- Clone the repo **with submodules**
+- Download [libdragon-cli](https://github.com/anacierdem/libdragon-docker) and run `libdragon make` on the root of the project.
+
+---
+---
+## ORIGINAL README
+
 Abuse README
 ============
 
