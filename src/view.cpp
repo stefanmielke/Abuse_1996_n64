@@ -130,7 +130,7 @@ int32_t view::xoff()
     if (!m_focus)
         return pan_x;
 
-    return Max(0, m_lastpos.x - (m_bb.x - m_aa.x + 1) / 2 + m_shift.x + pan_x);
+    return Max(0, (int)(m_lastpos.x - (m_bb.x - m_aa.x + 1) / 2 + m_shift.x + pan_x));
 }
 
 int32_t view::interpolated_xoff()
@@ -138,8 +138,8 @@ int32_t view::interpolated_xoff()
     if (!m_focus)
         return pan_x;
 
-    return Max(0, (m_lastlastpos.x + m_lastpos.x) / 2
-                    - (m_bb.x - m_aa.x + 1) / 2 + m_shift.x + pan_x);
+    return Max(0, (int)((m_lastlastpos.x + m_lastpos.x) / 2
+                    - (m_bb.x - m_aa.x + 1) / 2 + m_shift.x + pan_x));
 }
 
 int32_t view::yoff()
@@ -147,7 +147,7 @@ int32_t view::yoff()
     if (!m_focus)
         return pan_y;
 
-    return Max(0, m_lastpos.y - (m_bb.y - m_aa.y + 1) / 2 - m_shift.y + pan_y);
+    return Max(0, (int)(m_lastpos.y - (m_bb.y - m_aa.y + 1) / 2 - m_shift.y + pan_y));
 }
 
 int32_t view::interpolated_yoff()
@@ -155,8 +155,8 @@ int32_t view::interpolated_yoff()
     if (!m_focus)
         return pan_y;
 
-    return Max(0, (m_lastlastpos.y + m_lastpos.y) / 2
-                    - (m_bb.y - m_aa.y + 1) / 2 - m_shift.y + pan_y);
+    return Max(0, (int)((m_lastlastpos.y + m_lastpos.y) / 2
+                    - (m_bb.y - m_aa.y + 1) / 2 - m_shift.y + pan_y));
 }
 
 
@@ -168,14 +168,14 @@ void view::update_scroll()
     m_lastlastpos = m_lastpos;
 
     if (m_focus->x > m_lastpos.x)
-        m_lastpos.x = Max(m_lastpos.x, m_focus->x - no_xright);
+        m_lastpos.x = Max((int)m_lastpos.x, (int)(m_focus->x - no_xright));
     else if (m_focus->x < m_lastpos.x)
-        m_lastpos.x = Min(m_lastpos.x, m_focus->x + no_xleft);
+        m_lastpos.x = Min((int)m_lastpos.x, (int)(m_focus->x + no_xleft));
 
     if (m_focus->y > m_lastpos.y)
-        m_lastpos.y = Max(m_lastpos.y, m_focus->y - no_ybottom);
+        m_lastpos.y = Max((int)m_lastpos.y, (int)(m_focus->y - no_ybottom));
     else if (m_focus->y < m_lastpos.y)
-        m_lastpos.y = Min(m_lastpos.y, m_focus->y + no_ytop);
+        m_lastpos.y = Min((int)m_lastpos.y, (int)(m_focus->y + no_ytop));
 }
 
 static char cur_user_name[20] = { 0 };
@@ -185,7 +185,7 @@ char const *get_login()
     if (cur_user_name[0])
         return cur_user_name;
 
-#if defined __CELLOS_LV2__
+#if defined __CELLOS_LV2__ ||  defined N64
     /* FIXME: retrieve login name */
     return "Player";
 #elif defined WIN32

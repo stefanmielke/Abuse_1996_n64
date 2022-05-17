@@ -2247,7 +2247,7 @@ int level::save(char const *filename, int save_all)
                 }
             }
             delete bk;
-#if (defined(__MACH__) || !defined(__APPLE__)) && (!defined(WIN32))
+#if (defined(__MACH__) || !defined(__APPLE__)) && (!defined(WIN32)) && (!defined(N64))
             chmod( bkname, S_IRWXU | S_IRWXG | S_IRWXO );
 #endif
         }
@@ -2342,7 +2342,7 @@ int level::save(char const *filename, int save_all)
             }
 
             delete fp;
-#if (defined(__MACH__) || !defined(__APPLE__)) && (!defined(WIN32))
+#if (defined(__MACH__) || !defined(__APPLE__)) && (!defined(WIN32)) && (!defined(N64))
             chmod( name, S_IRWXU | S_IRWXG | S_IRWXO );
 #endif
             write_cache_prof_info();
@@ -2653,8 +2653,8 @@ void level::foreground_intersect(int32_t x1, int32_t y1, int32_t &x2, int32_t &y
 
   if (blockx2>=foreground_width()) { x2=tl*foreground_width()-1; }
   if (blocky2>=foreground_height()) { y2=th*foreground_height()-1; }
-  blockx1=Max(blockx1,0);
-  blocky1=Max(blocky1,0);
+  blockx1=Max((int)blockx1,(int)0);
+  blocky1=Max((int)blocky1,(int)0);
 
   if ((blockx1>blockx2) || (blocky1>blocky2)) return ;
 

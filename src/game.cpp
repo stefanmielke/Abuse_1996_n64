@@ -2468,7 +2468,7 @@ int main(int argc, char *argv[])
 
     stat_man = new text_status_manager();
 
-#if !defined __CELLOS_LV2__
+#if !defined __CELLOS_LV2__ && !defined N64
     // look to see if we are supposed to fetch the data elsewhere
     if (getenv("ABUSE_PATH"))
         set_filename_prefix(getenv("ABUSE_PATH"));

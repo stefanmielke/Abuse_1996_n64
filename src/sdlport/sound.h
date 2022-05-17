@@ -11,7 +11,7 @@
 #ifndef __SOUND_H__
 #define __SOUND_H__
 
-#if !defined __CELLOS_LV2__
+#if !defined __CELLOS_LV2__ && !defined N64
 #   include "SDL_mixer.h"
 #endif
 
@@ -33,7 +33,7 @@ public:
     void play(int volume = 127, int pitch = 128, int panpot = 128);
 
 private:
-#if !defined __CELLOS_LV2__
+#if !defined __CELLOS_LV2__ && !defined N64
     Mix_Chunk* m_chunk;
 #endif
 };
@@ -41,7 +41,7 @@ private:
 class song
 {
 public:
-#if !defined __CELLOS_LV2__
+#if !defined __CELLOS_LV2__ && !defined N64
     char const *name() { return Name; }
 #endif
     song(char const *filename);
@@ -52,7 +52,7 @@ public:
     ~song();
 
 private:
-#if !defined __CELLOS_LV2__
+#if !defined __CELLOS_LV2__ && !defined N64
     char *Name;
     unsigned char *data;
     unsigned long song_id;

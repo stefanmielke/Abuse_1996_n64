@@ -4,3 +4,12 @@
 # Ignore various backup files
 *.bak
 *~
+
+*.o
+*.d
+*.z64
+rom.asm
+
+/.vscode/
+/build/
+/build_n64/

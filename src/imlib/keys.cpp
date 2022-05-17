@@ -19,6 +19,7 @@
 # define strcasecmp _stricmp
 #endif
 
+#include "common.h"
 #include "keys.h"
 
 char const *jk_key_names[]=

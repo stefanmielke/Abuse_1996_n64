@@ -58,6 +58,8 @@ void time_marker::get_time()
 #ifdef WIN32
 	// Use GetSystemTimeAsFileTime for this
 	GetSystemTimeAsFileTime(&ticks);
+#elif defined N64
+	ticks = timer_ticks();
 #else
     struct timeval tv = { 0, 0 };
     gettimeofday( &tv, NULL );
@@ -78,6 +80,8 @@ double time_marker::diff_time( time_marker *other )
 	__int64 other_ticks = (other->ticks.dwHighDateTime << 32L) | (other->ticks.dwLowDateTime);
 	// Note we're dividing by 10,000,000 here - ticks are in 100ns increments, not microseconds.
 	return (double)(our_ticks - other_ticks) / 10000000.0;
+#elif defined N64
+	return ticks - other->ticks;
 #else
     return (double)(seconds - other->seconds) + (double)(micro_seconds - other->micro_seconds) / 1000000;
 #endif

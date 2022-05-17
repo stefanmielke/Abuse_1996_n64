@@ -950,7 +950,7 @@ void *l_caller(long number, void *args)
     } break;
     case 54 :
     {
-#if defined __CELLOS_LV2__
+#if defined __CELLOS_LV2__ ||  defined N64
       /* FIXME: retrieve the PS3 account name */
       char const *cd = "Player";
 #else

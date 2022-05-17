@@ -11,6 +11,7 @@
 #ifndef __SPECACHE_HPP_
 #define __SPECACHE_HPP_
 
+#include "common.h"
 #include "specs.h"
 
 #include <string.h>

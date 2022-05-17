@@ -12,6 +12,7 @@
 #define __LISP_HPP_
 
 #include <cstdlib>
+#include <cstdint>
 #include <SDL_config.h>//AR (#include <SDL_config.h>)
 
 #ifdef L_PROFILE
@@ -248,9 +249,9 @@ private:
     static void CollectStacks();
 };
 
-static inline LObject *&CAR(void *x) { return ((LList *)x)->m_car; }
-static inline LObject *&CDR(void *x) { return ((LList *)x)->m_cdr; }
-static inline ltype item_type(void *x) { if (x) return *(ltype *)x; return L_CONS_CELL; }
+ inline LObject *&CAR(void *x) { return ((LList *)x)->m_car; }
+ inline LObject *&CDR(void *x) { return ((LList *)x)->m_cdr; }
+ inline ltype item_type(void *x) { if (x) return *(ltype *)x; return L_CONS_CELL; }
 
 void perm_space();
 void tmp_space();

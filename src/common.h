@@ -37,6 +37,21 @@
 #include "lol/timer.h"
 using namespace lol;
 
+#ifdef N64
+#include <cstring>
+static inline char *strdup(const char *in)
+{
+    char *dup = (char *)malloc((strlen(in) + 1) * sizeof(char));
+    strcpy(dup, in);
+    return dup;
+}
+static inline int strcasecmp (const char *s1, const char *s2)
+{
+    return strcmp(s1, s2);
+}
+
+#endif
+
 //
 // Custom utility functions
 //

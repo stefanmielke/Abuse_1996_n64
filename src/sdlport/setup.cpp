@@ -39,6 +39,7 @@
 #include <signal.h>
 #include <string>
 #include "SDL.h"
+#include "common.h"
 
 #include "specs.h"
 #include "keys.h"
@@ -601,7 +602,7 @@ void setup( int argc, char **argv )
     set_save_filename_prefix(savedir);
     CoTaskMemFree(appData);
     free( savedir );
-#else
+#elif !defined N64
     if( (homedir = getenv( "HOME" )) != NULL )
     {
         savedir = (char *)malloc( strlen( homedir ) + 9 );

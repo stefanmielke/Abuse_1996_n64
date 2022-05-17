@@ -29,7 +29,9 @@
 #include <cstring>
 
 #include "SDL.h"
+#ifndef N64
 #include "SDL_mixer.h"
+#endif
 
 #include "sound.h"
 #include "hmi.h"
@@ -46,6 +48,9 @@ static SDL_AudioSpec audioObtained;
 //
 int sound_init( int argc, char **argv )
 {
+#ifdef N64
+    return 0;
+#else
 	//AR sound and music are always enabled, it just never plays if it is diabled in the config file
 	//or if it failed to load the files (sound_enabled==true)
 
@@ -86,6 +91,7 @@ int sound_init( int argc, char **argv )
 	
 	// It's all good
     return sound_enabled;
+#endif
 }
 
 //
@@ -95,10 +101,12 @@ int sound_init( int argc, char **argv )
 //
 void sound_uninit()
 {
+#ifndef N64
     if (!sound_enabled)
         return;
 
     Mix_CloseAudio();
+#endif
 }
 
 //
@@ -108,6 +116,7 @@ void sound_uninit()
 //
 sound_effect::sound_effect(char const *filename)
 {
+#ifndef N64
     if (!sound_enabled)
         return;
 
@@ -120,6 +129,7 @@ sound_effect::sound_effect(char const *filename)
     SDL_RWops *rw = SDL_RWFromMem(temp_data, fp.file_size());
     m_chunk = Mix_LoadWAV_RW(rw, 1);
     free(temp_data);
+#endif
 }
 
 //
@@ -129,6 +139,7 @@ sound_effect::sound_effect(char const *filename)
 //
 sound_effect::~sound_effect()
 {
+#ifndef N64
     if(!sound_enabled)
         return;
 
@@ -142,6 +153,7 @@ sound_effect::~sound_effect()
     while (Mix_Playing(-1))
         SDL_Delay(10);
     Mix_FreeChunk(m_chunk);
+#endif
 }
 
 //
@@ -155,6 +167,7 @@ sound_effect::~sound_effect()
 //
 void sound_effect::play(int volume, int pitch, int panpot)
 {
+#ifndef N64
 	if(!sound_enabled || settings.no_sound) return;
 
     int channel = Mix_PlayChannel(-1, m_chunk, 0);
@@ -163,6 +176,7 @@ void sound_effect::play(int volume, int pitch, int panpot)
         Mix_Volume(channel, volume);
         Mix_SetPanning(channel, panpot, 255 - panpot);
     }
+#endif
 }
 
 
@@ -170,6 +184,7 @@ void sound_effect::play(int volume, int pitch, int panpot)
 
 song::song(char const * filename)
 {
+#ifndef N64
 	data = NULL;
     Name = strdup(filename);
     song_id = 0;
@@ -199,10 +214,12 @@ song::song(char const * filename)
                Mix_GetError(), realname);
         return;
     }
+#endif
 }
 
 song::~song()
 {
+#ifndef N64
     if(playing()) stop();
 
     free(data);
@@ -210,10 +227,12 @@ song::~song()
 
     Mix_FreeMusic(music);
     SDL_FreeRW(rw);
+#endif
 }
 
 void song::play( unsigned char volume )
 {
+#ifndef N64
 	if(!sound_enabled || settings.no_music) return;
 	
 	song_id = 1;
@@ -221,21 +240,30 @@ void song::play( unsigned char volume )
 	//AR play music in a loop
     Mix_PlayMusic(this->music, -1);
     Mix_VolumeMusic(volume);
+#endif
 }
 
 void song::stop( long fadeout_time )
 {
+#ifndef N64
     song_id = 0;
 
     Mix_FadeOutMusic(100);
+#endif
 }
 
 int song::playing()
 {
+#ifdef N64
+    return 0;
+#else
     return Mix_PlayingMusic();
+#endif
 }
 
 void song::set_volume( int volume )
 {
+#ifndef N64
     Mix_VolumeMusic(volume);
+#endif
 }

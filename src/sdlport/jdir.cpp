@@ -25,11 +25,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "common.h"
 
 #include <sys/types.h>
 #ifdef WIN32
 # include <Windows.h>
-#else
+#elif !defined(N64)
 # include <dirent.h>
 #endif
 #ifdef HAVE_UNISTD_H
@@ -38,6 +39,7 @@
 
 void get_directory(char *path, char **&files, int &tfiles, char **&dirs, int &tdirs)
 {
+#ifndef N64
     struct dirent *de;
     files = NULL;
     dirs = NULL;
@@ -111,5 +113,6 @@ void get_directory(char *path, char **&files, int &tfiles, char **&dirs, int &td
     if( t )
         free( tlist );
     chdir( curdir );
+#endif
 #endif
 }

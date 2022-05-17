@@ -41,7 +41,8 @@ class named_field
   char *real_name;
   char *descript_name;
   named_field(char *real, char *fake)
-  { real_name = strdup(real);
+  {
+    real_name = strdup(real);
     descript_name = strdup(fake);
   }
   ~named_field() { free(real_name); free(descript_name); }

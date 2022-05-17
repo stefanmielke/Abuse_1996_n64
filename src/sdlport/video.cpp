@@ -27,7 +27,9 @@
 #ifdef WIN32
 #include <windows.h>
 #endif
+#ifndef N64
 #include "Glee.h"
+#endif
 //Abuse linker->input:
 //	- opengl32.lib
 //	- GLee.lib
@@ -60,9 +62,12 @@ extern Settings settings;
 
 void calculate_mouse_scaling();
 
+#ifndef N64
 //AR OpenGL
 SDL_GLContext glcontext;
 GLuint ar_texture;
+#endif
+
 SDL_DisplayMode desktop;
 int window_w = 320, window_h = 200;
 bool ar_fullscreen = false;
@@ -113,6 +118,7 @@ void set_mode(int argc, char **argv)
         exit(1);
     }
 
+#ifndef N64
 	//AR OpenGL
 	glcontext = SDL_GL_CreateContext(window);
 
@@ -142,6 +148,7 @@ void set_mode(int argc, char **argv)
 	}
 	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
 	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+#endif
 
 	//Create our surface for the OpenGL texture
 	screen = SDL_CreateRGBSurface(SDL_SWSURFACE, xres , yres , 32,
@@ -285,11 +292,12 @@ void video_change_settings(int scale_add, bool toggle_fullscreen)
 	SDL_GetWindowSize(window,&window_w,&window_h);
 	SDL_SetWindowPosition(window,desktop.w/2-window_w/2,desktop.h/2-window_h/2);
 
+#ifndef N64
 	glViewport(0,0,window_w,window_h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0,window_w,window_h,0,-1,1);
-	//
+#endif
 
     calculate_mouse_scaling();
 }
@@ -470,6 +478,8 @@ void update_window_done()
 	//AR convert to match the OpenGL texture
 	SDL_BlitSurface(surface, NULL, screen, NULL);
 
+#ifdef N64
+#else
 	//clear the backbuffer
 	glClearColor(0,0,0,0);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -497,5 +507,5 @@ void update_window_done()
 	glEnd();
 
 	SDL_GL_SwapWindow(window);
-	//
+#endif
 }

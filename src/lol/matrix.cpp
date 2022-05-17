@@ -82,7 +82,7 @@ template<> void mat4::printf() const
 #endif
 }
 
-#if !defined __ANDROID__ && !defined WIN32
+#if !defined __ANDROID__ && !defined WIN32 && !defined N64
 // FIXME: How to make this work under Windows?
 template<> std::ostream &operator<<(std::ostream &stream, ivec2 const &v)
 {

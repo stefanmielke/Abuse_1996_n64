@@ -19,6 +19,9 @@ typedef struct _FILETIME {
     int32_t dwHighDateTime;
 } FILETIME;
 #endif
+#ifdef N64
+#include <libdragon.h>
+#endif
 
 class time_marker
 {
@@ -28,6 +31,8 @@ public:
 #elif defined WIN32
 	// Use FILETIME
 	FILETIME ticks;
+#elif defined N64
+    long long ticks;
 #else
     long seconds;
     long micro_seconds;
