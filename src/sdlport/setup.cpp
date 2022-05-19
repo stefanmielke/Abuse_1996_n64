@@ -679,6 +679,8 @@ void setup( int argc, char **argv )
         assetDirName[cut_at] = '\0';
     printf("Setting data dir to %s\n", assetDirName);
     set_filename_prefix( assetDirName );
+#elif defined N64
+	set_filename_prefix( "rom:/" );
 #else
     set_filename_prefix( ASSETDIR );
 #endif

@@ -11,8 +11,7 @@ abuse_VERSION_MINOR=9
 abuse_VERSION_PATCH=0
 abuse_VERSION_TWEAK=0
 
-
-N64_CXXFLAGS += -Ilibs/sdl_n64/SDL2/include -I$(SOURCE_DIR) -I$(SOURCE_DIR)/imlib -I$(SOURCE_DIR)/lisp -DPACKAGE_NAME="abuse" -DPACKAGE_VERSION="${abuse_VERSION}" -DHAVE_UNISTD_H -DASSETDIR='"."'
+N64_CXXFLAGS += -I$(SOURCE_DIR) -I$(SOURCE_DIR)/imlib -I$(SOURCE_DIR)/lisp -DPACKAGE_NAME="abuse" -DPACKAGE_VERSION="${abuse_VERSION}" -DHAVE_UNISTD_H -DASSETDIR='"rom:/"' -DN64
 N64_CXXFLAGS += -Wno-error=class-conversion -Wno-error=misleading-indentation -Wno-error=unused-function -Wno-error=maybe-uninitialized -Wno-error=format-overflow=
 N64_CXXFLAGS += -Wno-error=unused-but-set-variable -Wno-error=unused-variable -Wno-error=format-truncation= -Wno-error=delete-non-virtual-dtor -Wno-error=stringop-truncation
 N64_CXXFLAGS += -Wno-error=alloc-size-larger-than= -Wno-error=narrowing -Wno-error=nonnull-compare
