@@ -1,3 +1,28 @@
+# Abuse 64
+
+Port of Abuse to the Nintendo 64.
+
+## Controls
+
+N/A
+
+## Status
+
+Crashes when using "nil" inside the Lisp processor.
+
+## Changes from Original
+
+N/A
+
+## Building
+
+- Clone the repo **with submodules**
+- Download [libdragon-cli](https://github.com/anacierdem/libdragon-docker) and run `libdragon make` on the root of the project.
+
+---
+---
+## ORIGINAL README
+
 Abuse README
 ============
 
