@@ -251,7 +251,7 @@ private:
 
  inline LObject *&CAR(void *x) { return ((LList *)x)->m_car; }
  inline LObject *&CDR(void *x) { return ((LList *)x)->m_cdr; }
- inline ltype item_type(void *x) { if (x) return *(ltype *)x; return L_CONS_CELL; }
+ inline ltype item_type(void *x) { if (x != NULL) return *(ltype *)x; return L_CONS_CELL; }
 
 void perm_space();
 void tmp_space();
